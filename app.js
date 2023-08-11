@@ -1,31 +1,44 @@
 const express = require('express');
-const app = express(); // Variable con la capacidad de crear una endpoint
-const port = 3000; //todas las conexiones se pueden hacer por el puerto 3000
+const passport = require('passport');
+require('./auth')(passport);
 
+const app = express();
+const port = 3000;
+
+// Llamada al endpoint '/'
 app.get('/',(req,res) => {
-   // req es la request, la petición
-   // res es la response, la respuesta
    res.status(200).send('Hello World!');
 });
 
-app.post('/team/pokemons',() => {
-
+app.listen(port,(req,res) => {
+   console.log(`server app listening on port ${port}`);
 });
 
-app.get('/team',() => {
-
+app.post('/login',(req,res) => {
+   //Comprobamos las credenciales del usuario
+   res.status(200).json(
+      { token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.zX5MPQtbjoNAS7rpsx_hI7gqGIlXOQq758dIqyBVxxY' }
+   );
 });
+
+
+app.post('/team/pokemons',(req,res) => {
+   res.status(200).send('Hello World!');
+});
+
+app.get('/team',
+   passport.authenticate('jwt',{ session: false }),
+   (req,res) => {
+      res.status(200).send('Hello World!');
+   });
 
 // Para ponder los parámetros se usa :
-app.delete('/team/pokemons/:pokemonID',() => {
-
+app.delete('/team/pokemons/:pokemonID',(req,res) => {
+   res.status(200).send('Hello World!');
 });
 
-app.put('/team',() => {
-
+app.put('/team',(req,res) => {
+   res.status(200).send('Hello World!');
 });
 
-// Mientras tengamos esto en la terminal, el puerto 3000 esta escuchando, sino se debe de correr con node.
-app.listen(port,() => {
-   console.log(`Server running at http://localhost:${port}`);
-});
+module.exports = app;
