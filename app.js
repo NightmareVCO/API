@@ -1,8 +1,18 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
+const usersController = require('./controllers/users');
+usersController.registerUser('bettatech','1234');
+usersController.registerUser('mastermind','1234');
+
+
 require('./auth')(passport);
 
 const app = express();
+app.use(bodyParser.json());
+
 const port = 3000;
 
 // Llamada al endpoint '/'
@@ -15,10 +25,25 @@ app.listen(port,(req,res) => {
 });
 
 app.post('/login',(req,res) => {
+   if (!req.body)
+      return res.status(400).json({ message: 'missing data' });
+   else if (!req.body.userName || !req.body.password)
+      return res.status(400).json({ message: 'missing data' });
+
    //Comprobamos las credenciales del usuario
-   res.status(200).json(
-      { token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.zX5MPQtbjoNAS7rpsx_hI7gqGIlXOQq758dIqyBVxxY' }
-   );
+   usersController.checkUserCredentials(req.body.userName,req.body.password,(err,result) => {
+
+      // Si son incorrectas, devolvemos un error
+      if (err || !result)
+         res.status(401).json({ message: 'invalid credentials' });
+
+      // Si son correctas, generamos un token
+      const token = jwt.sign({ userID: result },'secretPassword');
+      res.status(200).json(
+         { token: token }
+      );
+
+   });
 });
 
 
