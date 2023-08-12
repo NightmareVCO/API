@@ -30,7 +30,8 @@ router.route('/login')
             res.status(401).json({ message: 'invalid credentials' });
 
          // Si son correctas, generamos un token
-         const token = jwt.sign({ userID: result },'secretPassword');
+         let user = usersController.getUserIdFromUserName(req.body.userName);
+         const token = jwt.sign({ userID: user.userID },'secretPassword');
          res.status(200).json(
             { token: token }
          );
