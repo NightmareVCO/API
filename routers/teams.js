@@ -9,18 +9,18 @@ const { getUser } = require('../controllers/users');
 
 router.route('/')
    .get(passport.authenticate('jwt',{ session: false }),
-      (req,res,next) => {
-
+      (req,res) => {
          let user = getUser(req.user.userID);
          res.status(200).json({
             trainer: user.userName,
             team: teamsController.getTeam(req.user.userID)
          });
       })
-   .put((req,res) => {
-
-      teamsController.setTeam(req.body.userID,req.body.team);
-   });
+   .put(passport.authenticate('jwt',{ session: false }),
+      (req,res) => {
+         teamsController.setTeam(req.user.userID,req.body.team);
+         res.status(200).send();
+      });
 
 router.route('/pokemons')
    .post(() => {
