@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 require('../auth')(passport);
+const axios = require('axios');
 
 const teamsController = require('../controllers/teams');
 // Para traer específicamente la función
@@ -23,9 +24,31 @@ router.route('/')
       });
 
 router.route('/pokemons')
-   .post(() => {
-      res.status(200).send('Hello World!');
-   });
+   .post(passport.authenticate('jwt',{ session: false }),
+      (req,res) => {
+         let pokemonName = req.body.name;
+         console.log('calling pokeapi for: ' + pokemonName);
+         axios.get('https://pokeapi.co/api/v2/pokemon/' + pokemonName.toLowerCase())
+            .then((response) => {
+               let pokemon = {
+                  name: pokemonName,
+                  pokemonNumber: response.data.id
+               };
+               teamsController.addPokemon(req.user.userID,pokemon);
+
+               res.status(201).json(pokemon);
+            })
+            .catch((error) => {
+               console.log(error);
+               res.status(400).json({ message: error });
+            })
+            .then(() => {
+
+            });
+
+      });
+
+
 router.route('/pokemons/:pokemonID')
    .delete(() => {
       res.status(200).send('Hello World!');

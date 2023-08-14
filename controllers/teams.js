@@ -8,8 +8,8 @@ const getTeam = (userID) => {
    return teamsDatabase[userID];
 };
 
-const addPokemon = (userID,pokemonName) => {
-   teamsDatabase[userID].push({ name: pokemonName });
+const addPokemon = (userID,pokemon) => {
+   teamsDatabase[userID].push(pokemon);
 };
 
 const setTeam = (userID,team) => {
