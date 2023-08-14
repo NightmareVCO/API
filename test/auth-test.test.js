@@ -2,8 +2,15 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
-
+const usersController = require('../controllers/users');
 const app = require('../app');
+
+// Antes de ejecutar el describe completo, se insertan
+before((done) => {
+   usersController.registerUser('bettatech','1234');
+   usersController.registerUser('mastermind','1234');
+   done();
+});
 
 describe('Suite de pruebas de auth',() => {
    // Cuando no tiene correctamente la llave puesta
@@ -57,6 +64,10 @@ describe('Suite de pruebas de auth',() => {
    });
 
 });
-
+// 
+after((done) => {
+   usersController.cleanUserDatabase();
+   done();
+})
 
 

@@ -2,10 +2,13 @@ const uuid = require('uuid');
 const crypto = require('../crypto.js');
 const teams = require('./teams');
 
-const userDatabase = {};
+let userDatabase = {};
 // userID -> password
 
 
+const cleanUserDatabase = () => {
+   userDatabase = {};
+};
 
 // Guardar el usuario en la base de datos
 const registerUser = (userName,password) => {
@@ -54,5 +57,6 @@ module.exports = {
    registerUser,
    checkUserCredentials,
    getUserIdFromUserName,
-   getUser
+   getUser,
+   cleanUserDatabase
 };

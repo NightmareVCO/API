@@ -50,8 +50,10 @@ router.route('/pokemons')
 
 
 router.route('/pokemons/:pokemonID')
-   .delete(() => {
-      res.status(200).send('Hello World!');
-   });
+   .delete(passport.authenticate('jwt',{ session: false }),
+      (req,res) => {
+         teamsController.deletePokemonAt(req.user.userID,req.params.pokemonID);
+         res.status(200).send();
+      });
 
 module.exports = router;
