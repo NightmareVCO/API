@@ -1,16 +1,14 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-
+const middleware = require('./middlewares');
 // Routes
 const authRoutes = require('./auth/auth.router');
 const teamRoutes = require('./teams/teams.router');
 
 const app = express();
-app.use(bodyParser.json());
 
 const port = 3000;
 
-// Llamada al endpoint '/'
+middleware.setupMiddleware(app);
 app.get('/',(req,res) => {
    res.status(200).send('Hello World!');
 });
