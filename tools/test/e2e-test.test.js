@@ -5,7 +5,7 @@ const chaiHttp = require('chai-http');
 // use espera un plugin en este caso es chai-http
 chai.use(chaiHttp);
 
-const app = require('../app');
+const app = require('../../app');
 
 describe('Suite de pruebas e2e',() => {
    it('should return hello world',(done) => {

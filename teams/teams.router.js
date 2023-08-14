@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-require('../auth')(passport);
+require('../tools/auth')(passport);
 const axios = require('axios');
 
-const teamsController = require('../controllers/teams');
+const teamsController = require('./teams.controller');
 // Para traer específicamente la función
-const { getUser } = require('../controllers/users');
+const { getUser } = require('../auth/users.controller');
 
 router.route('/')
    .get(passport.authenticate('jwt',{ session: false }),
