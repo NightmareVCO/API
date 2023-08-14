@@ -40,12 +40,12 @@ const getUserIdFromUserName = (userName) => {
 
 // Comprobar que las credenciales son correctas
 const checkUserCredentials = (userName,password,done) => {
-   console.log('checking user credentials');
+   // console.log('checking user credentials');
 
    let user = getUserIdFromUserName(userName);
    if (user)
    {
-      console.log(user);
+      // console.log(user);
       crypto.comparePassword(password,user.password,done);
    }
    else

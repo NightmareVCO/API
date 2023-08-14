@@ -27,7 +27,7 @@ router.route('/pokemons')
    .post(passport.authenticate('jwt',{ session: false }),
       (req,res) => {
          let pokemonName = req.body.name;
-         console.log('calling pokeapi for: ' + pokemonName);
+         // console.log('calling pokeapi for: ' + pokemonName);
          axios.get('https://pokeapi.co/api/v2/pokemon/' + pokemonName.toLowerCase())
             .then((response) => {
                let pokemon = {
@@ -39,7 +39,7 @@ router.route('/pokemons')
                res.status(201).json(pokemon);
             })
             .catch((error) => {
-               console.log(error);
+               // console.log(error);
                res.status(400).json({ message: error });
             })
             .then(() => {

@@ -17,7 +17,7 @@ const addPokemon = (userID,pokemon) => {
 };
 
 const deletePokemonAt = (userID,index) => {
-   console.log('DELETE',userID,index);
+   // console.log('DELETE',userID,index);
    if (teamsDatabase[userID][index])
       // Splice para eliminar n elementos a partir de un indice.
       teamsDatabase[userID].splice(index,1);
