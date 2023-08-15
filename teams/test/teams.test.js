@@ -13,9 +13,9 @@ before((done) => {
    done();
 });
 
-afterEach((done) => {
-   teamsController.cleanTeamDatabase();
-   done();
+afterEach(async () => {
+   await teamsController.cleanTeamDatabase();
+   // done(); No es necesario
 });
 describe('Suite de pruebas de teams',() => {
    it('should return the team of the given user',(done) => {
@@ -120,6 +120,42 @@ describe('Suite de pruebas de teams',() => {
                });
          });
    });
+
+
+
+   it('should not be able to add pokemon if you already have 6',(done) => {
+      let team = [
+         { name: 'Charizard' },
+         { name: 'Blastoise' },
+         { name: 'Pikachu' },
+         { name: 'Charizard' },
+         { name: 'Blastoise' },
+         { name: 'Pikachu' }];
+      chai.request(app)
+         .post('/auth/login')
+         .set('content-type','application/json')
+         .send({ userName: 'mastermind',password: '1234' })
+         .end((err,res) => {
+            let token = res.body.token;
+            //Expect valid login
+            chai.assert.equal(res.statusCode,200);
+            chai.request(app)
+               .put('/teams')
+               .send({ team: team })
+               .set('Authorization',`JWT ${token}`)
+               .end((err,res) => {
+                  chai.request(app)
+                     .post('/teams/pokemons')
+                     .send({ name: 'Vibrava' })
+                     .set('Authorization',`JWT ${token}`)
+                     .end((err,res) => {
+                        chai.assert.equal(res.statusCode,400);
+                        done();
+                     });
+               });
+         });
+   });
+
 });
 after((done) => {
    usersController.cleanUserDatabase();

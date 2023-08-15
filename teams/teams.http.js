@@ -2,11 +2,12 @@ const axios = require('axios').default;
 const teamsController = require('./teams.controller');
 const { getUser } = require('../auth/users.controller');
 
-const getTeamFromUser = (req,res) => {
+const getTeamFromUser = async (req,res) => {
    let user = getUser(req.user.userID);
+   let team = await teamsController.getTeam(req.user.userID);
    res.status(200).json({
       trainer: user.userName,
-      team: teamsController.getTeam(req.user.userID)
+      team: team
    });
 };
 
@@ -15,27 +16,22 @@ const setTeamToUser = (req,res) => {
    res.status(200).send();
 };
 
-const addPokemonToTeam = (req,res) => {
+const addPokemonToTeam = async (req,res) => {
    let pokemonName = req.body.name;
-   axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`)
-      .then((response) => {
-         // handle success
-         let pokemon = {
-            name: pokemonName,
-            pokemonNumber: response.data.id
-         };
-         teamsController.addPokemon(req.user.userID,pokemon);
+   let pokeApiResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+   let pokemon = {
+      name: pokemonName,
+      pokemonNumber: pokeApiResponse.data.id
+   };
 
-         res.status(201).json(pokemon);
-      })
-      .catch((error) => {
-         // handle error
-         console.log(error);
-         res.status(400).json({ message: error });
-      })
-      .then(() => {
-         // always executed
-      });
+   try
+   {
+      await teamsController.addPokemon(req.user.userID,pokemon);
+      res.status(201).json(pokemon);
+   } catch (error)
+   {
+      res.status(400).json({ message: "You have already 6 pokemons" });
+   }
 };
 
 const deletePokemonFromTeam = (req,res) => {
