@@ -1,5 +1,6 @@
 const express = require('express');
 const middleware = require('./middlewares');
+require('./database');
 // Routes
 const authRoutes = require('./auth/auth.router');
 const teamRoutes = require('./teams/teams.router');

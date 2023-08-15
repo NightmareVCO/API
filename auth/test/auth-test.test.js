@@ -3,13 +3,18 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 const usersController = require('../users.controller');
+const teamsController = require('../../teams/teams.controller');
 const app = require('../../app');
 
 // Antes de ejecutar el describe completo, se insertan
-before((done) => {
-   usersController.registerUser('bettatech','1234');
-   usersController.registerUser('mastermind','1234');
-   done();
+beforeEach(async () => {
+   await usersController.registerUser('bettatech','1234');
+   await usersController.registerUser('mastermind','1234');
+});
+
+afterEach(async () => {
+   await teamsController.cleanTeamDatabase();
+   await usersController.cleanUserDatabase();
 });
 
 describe('Suite de pruebas de auth',() => {
@@ -62,12 +67,4 @@ describe('Suite de pruebas de auth',() => {
                });
          });
    });
-
 });
-// 
-after((done) => {
-   usersController.cleanUserDatabase();
-   done();
-})
-
-
