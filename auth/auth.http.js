@@ -1,6 +1,7 @@
 const usersController = require('./users.controller');
 const jwt = require('jsonwebtoken');
 const { to } = require('../tools/to');
+const PASSWORD = process.env.PASSWORD;
 
 const loginUser = async (req,res) => {
    if (!req.body)
@@ -16,7 +17,7 @@ const loginUser = async (req,res) => {
 
    // Si son correctas, generamos un token
    let user = await usersController.getUserIdFromUserName(req.body.userName);
-   const token = jwt.sign({ userID: user.userID },'secretPassword');
+   const token = jwt.sign({ userID: user.userID },PASSWORD);
    res.status(200).json(
       { token: token }
    );
