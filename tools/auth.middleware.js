@@ -10,17 +10,17 @@ const init = () => {
       secretOrKey: PASSWORD
    };
 
-   passport.use(new JwtStrategy(opts,(decoded,done) => {
+   passport.use(new JwtStrategy(opts, (decoded, done) => {
       // console.log('decoded jwt',decoded);
-      return done(null,decoded);
+      return done(null, decoded);
    }));
 };
 
-const protectWithJwt = (req,res,next) => {
+const protectWithJwt = (req, res, next) => {
    if (req.path == '/' || req.path == '/auth/login')
       return next();
 
-   return passport.authenticate('jwt',{ session: false })(req,res,next);
+   return passport.authenticate('jwt', { session: false })(req, res, next);
 };
 
 module.exports = {

@@ -8,5 +8,5 @@ if (process.env.NODE_ENV === 'test')
 
 const uri = `mongodb+srv://${user}:${password}@cluster0.ayhgeli.mongodb.net/${databasename}?retryWrites=true&w=majority`;
 
-mongoose.connect(uri,{ useNewUrlParser: true,useUnifiedTopology: true });
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 console.log('Connected to the database');

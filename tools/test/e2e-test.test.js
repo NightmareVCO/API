@@ -7,12 +7,12 @@ chai.use(chaiHttp);
 
 const app = require('../../app');
 
-describe('Suite de pruebas e2e',() => {
-   it('should return hello world',(done) => {
+describe('Suite de pruebas e2e', () => {
+   it('should return hello world', (done) => {
       chai.request(app) // Llama al servidor.
          .get('/') // Pide el endpoint
-         .end((err,res) => { // Tomamos la respuesta de la llamada anterior
-            chai.assert.equal(res.text,'Hello World!');
+         .end((err, res) => { // Tomamos la respuesta de la llamada anterior
+            chai.assert.equal(res.text, 'Hello World!');
             done(); // Para saber cuándo termina el test.
          });
    });
